@@ -1,0 +1,47 @@
+## lead() and lag() function via subquery
+
+SELECT
+	user_id,
+	month(date_time) as visit_month,
+	month(date_time) - (
+			     SELECT month(date_time) 
+			     FROM tbl_activity
+			     WHERE user_id = a.user_id AND
+				   month(date_time) < month(a.date_time)
+			     ORDER BY month(date_time) DESC 
+                             LIMIT 1
+				)   AS time_diff 
+FROM tbl_activity a
+GROUP BY user_id, month(date_time);
+
+In above you would need to specify "<" / ">" to express "lead()" / "lag()" functionality in subquery and don't forget to use "ORDER BY" clause
+
+
+SELECT
+	user_id, 
+	MONTH(date_time) AS visit_month,
+        ( SELECT 
+		month(date_time) 
+	  FROM tbl_activity 
+          WHERE 
+		user_id = a.user_id AND
+       		MONTH(date_time) > MONTH(a.date_time)
+          ORDER BY MONTH(date_time) 
+	  LIMIT 1 ) as lead
+
+FROM tbl_activity a
+GROUP BY user_id, MONTH(date_time);
+
+References: https://stackoverflow.com/questions/49869981/translate-lead-lag-function-to-mysql
+
+## DENSE RANK() and RANK()
+
+
+
+## MIN()
+
+## MAX()
+
+## SUM()
+
+## AVG()
