@@ -22,3 +22,5 @@ FROM
 	events 
 GROUP BY 
 	user_id;
+	
+** I have used MAX() on CASE statements to remove nulls introduced, can use sum() as well
