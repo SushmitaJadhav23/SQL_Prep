@@ -1,0 +1,24 @@
+# SQL Query to pivot a column using CASE WHEN
+/*
+INPUT TABLE
+ID     TYPE               USER_ID       DATE
+1      like		           1            2013-02-10 13:40:03
+2    twitter share         1            2013-02-11 16:40:14
+
+DESIRED TABLE -- MAX DATE FOR ALL EVENT TYPE FOR EACH USER
+ user_id       like                     comment                      twitter share              facebook share
+'1'       '2013-05-25 16:26:03'      '2013-02-25 05:22:55'      '2013-06-28 02:59:44'          '2013-02-13 17:54:59'
+'2'       '2013-07-01 12:37:51'      '2013-07-07 05:43:54'      '2013-06-27 21:52:09'          '2013-06-28 07:51:45'
+
+*/
+
+SELECT 
+  user_id,
+  max(CASE WHEN type = 'like' THEN (date) ELSE 0 END) AS 'like',
+  max(CASE WHEN type = 'comment' THEN (date) ELSE 0 END) AS 'comment',
+  max(CASE WHEN type = 'twitter share' THEN (date) ELSE 0 END) AS 'twitter share',
+  max(CASE WHEN type = 'facebook share' THEN (date) ELSE 0 END) AS 'facebook share'
+FROM 
+	events 
+GROUP BY 
+	user_id;
